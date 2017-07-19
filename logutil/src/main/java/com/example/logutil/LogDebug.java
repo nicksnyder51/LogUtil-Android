@@ -3,8 +3,16 @@ package com.example.logutil;
 import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.util.Log;
+
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by nsnyder on 7/13/2017 for 4Cite Marketing.
@@ -19,7 +27,8 @@ public class LogDebug {
     private static String DISPLAY_HEIGHT;
     private static String EVENT_TITLE;
     private static String TZ_OFFSET;
-    private static String CONTEXT;
+    private static String CONTEXT = "";
+    private static JSONObject serverResp;
 
 
     public static void setCID(String cid) {
@@ -48,19 +57,18 @@ public class LogDebug {
     public static void setTZOffset(int tzOffset) {
         TZ_OFFSET = String.valueOf(tzOffset);
     }
-    public static void displaySharedPrefs(Context ctx) {
+    public static JSONObject displaySharedPrefs(Context ctx) {
         RequestParams rp = new RequestParams();
         rp.add("sv_cid ", CID); rp.add("sv_session", UserDeviceID); rp.add("sv_svem", EmailAddress);
         rp.add("sv_dt", EVENT_DTTM); rp.add("sv_width", DISPLAY_WIDTH); rp.add("sv_height ", DISPLAY_HEIGHT);
         rp.add("sv_title", EVENT_TITLE); rp.add("sv_tzOffset ", TZ_OFFSET); rp.add("sv_ver", "1.6.6"); rp.add("sv_context", CONTEXT);
 
         HttpUtils.post("https://track.securedvisit.com", rp, new JsonHttpResponseHandler() {
-            /*@Override
-            public void onSuccess(int statusCode, PreferenceActivity.Header[] headers, JSONObject response) {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // If the response is JSONObject instead of expected JSONArray
-                Log.d("asd", "---------------- this is response : " + response);
                 try {
-                    JSONObject serverResp = new JSONObject(response.toString());
+                    serverResp = new JSONObject(response.toString());
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -68,11 +76,21 @@ public class LogDebug {
             }
 
             @Override
-            public void onSuccess(int statusCode, PreferenceActivity.Header[] headers, JSONArray timeline) {
+            public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
                 // Pull out the first event on the public timeline
 
-            }*/
-        });
+            }
 
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                try {
+                    serverResp = new JSONObject(errorResponse.toString());
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+        return(serverResp);
     }
 }
