@@ -66,7 +66,8 @@ public class LogDebug {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
             {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-                RESPONSE = "Unable to connect to server. Check your network !!";
+                RESPONSE = String.valueOf(statusCode);
+                //RESPONSE = "Unable to connect to server. Check your network !!";
             }
         });
         try {
