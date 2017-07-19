@@ -71,7 +71,7 @@ public class LogDebug {
                 STATUSCODE = statusCode;
                 // If the response is JSONObject instead of expected JSONArray
                 try {
-                    JSONObject RESPONSE = new JSONObject(response.toString());
+                    RESPONSE = new JSONObject(response.toString());
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -82,13 +82,19 @@ public class LogDebug {
             public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
                 // Pull out the first event on the public timeline
                 STATUSCODE = statusCode;
+                try {
+                    RESPONSE = new JSONObject(timeline.toString());
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 STATUSCODE = statusCode;
                 try {
-                    JSONObject RESPONSE = new JSONObject(errorResponse.toString());
+                    RESPONSE = new JSONObject(errorResponse.toString());
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -98,12 +104,28 @@ public class LogDebug {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 STATUSCODE = statusCode;
+                try {
+                    RESPONSE = new JSONObject(errorResponse.toString());
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 STATUSCODE = statusCode;
+                try {
+                    RESPONSE = new JSONObject(responseString);
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         });
-        Toast.makeText(ctx, RESPONSE.toString(), Toast.LENGTH_LONG).show();
+        try {
+            Toast.makeText(ctx, RESPONSE.toString(), Toast.LENGTH_LONG).show();
+        } catch (Exception e){
+            System.out.print(e);
+        }
     }
 }
