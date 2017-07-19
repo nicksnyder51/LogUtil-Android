@@ -28,7 +28,7 @@ public class LogDebug {
     public static void setEventDttm(String EventDttm) {
         EVENT_DTTM = EventDttm;
     }
-    public static void DisplaySize(Context ctx) {
+    public static void setDisplaySize(Context ctx) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) ctx).getWindowManager()
                 .getDefaultDisplay()
