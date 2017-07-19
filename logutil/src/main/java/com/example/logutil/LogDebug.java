@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -28,6 +29,7 @@ public class LogDebug {
     private static String EVENT_TITLE;
     private static String TZ_OFFSET;
     private static String CONTEXT = "";
+    private static JSONObject RESPONSE;
     private static int STATUSCODE;
 
 
@@ -57,7 +59,7 @@ public class LogDebug {
     public static void setTZOffset(int tzOffset) {
         TZ_OFFSET = String.valueOf(tzOffset);
     }
-    public static int displaySharedPrefs(Context ctx) {
+    public static void displaySharedPrefs(Context ctx) {
         RequestParams rp = new RequestParams();
         rp.add("sv_cid ", CID); rp.add("sv_session", UserDeviceID); rp.add("sv_svem", EmailAddress);
         rp.add("sv_dt", EVENT_DTTM); rp.add("sv_width", DISPLAY_WIDTH); rp.add("sv_height ", DISPLAY_HEIGHT);
@@ -69,7 +71,7 @@ public class LogDebug {
                 STATUSCODE = statusCode;
                 // If the response is JSONObject instead of expected JSONArray
                 try {
-                    JSONObject serverResp = new JSONObject(response.toString());
+                    JSONObject RESPONSE = new JSONObject(response.toString());
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -85,6 +87,13 @@ public class LogDebug {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 STATUSCODE = statusCode;
+                try {
+                    JSONObject RESPONSE = new JSONObject(errorResponse.toString());
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
@@ -95,6 +104,6 @@ public class LogDebug {
                 STATUSCODE = statusCode;
             }
         });
-        return(STATUSCODE);
+        Toast.makeText(ctx, RESPONSE.toString(), Toast.LENGTH_LONG).show();
     }
 }
