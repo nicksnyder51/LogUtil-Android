@@ -3,14 +3,11 @@ package com.example.logutil;
 import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
@@ -29,8 +26,7 @@ public class LogDebug {
     private static String EVENT_TITLE;
     private static String TZ_OFFSET;
     private static String CONTEXT = "";
-    private static JSONObject RESPONSE;
-    private static int STATUSCODE;
+    private static String RESPONSE;
 
 
     public static void setCID(String cid) {
@@ -67,59 +63,10 @@ public class LogDebug {
 
         HttpUtils.post("https://track.securedvisit.com", rp, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                STATUSCODE = statusCode;
-                // If the response is JSONObject instead of expected JSONArray
-                try {
-                    RESPONSE = new JSONObject(response.toString());
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
-                // Pull out the first event on the public timeline
-                STATUSCODE = statusCode;
-                try {
-                    RESPONSE = new JSONObject(timeline.toString());
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                STATUSCODE = statusCode;
-                try {
-                    RESPONSE = new JSONObject(errorResponse.toString());
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                STATUSCODE = statusCode;
-                try {
-                    RESPONSE = new JSONObject(errorResponse.toString());
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                STATUSCODE = statusCode;
-                try {
-                    RESPONSE = new JSONObject(responseString);
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
+            {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                RESPONSE = "Unable to connect to server. Check your network !!";
             }
         });
         try {
