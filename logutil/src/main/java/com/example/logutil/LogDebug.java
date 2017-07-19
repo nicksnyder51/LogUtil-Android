@@ -2,12 +2,18 @@ package com.example.logutil;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
@@ -17,8 +23,8 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class LogDebug {
-    private static String UserDeviceID;
     private static String CID;
+    private static String UserDeviceID;
     private static String EmailAddress;
     private static String EVENT_DTTM;
     private static String DISPLAY_WIDTH;
@@ -56,24 +62,19 @@ public class LogDebug {
         TZ_OFFSET = String.valueOf(tzOffset);
     }
     public static void displaySharedPrefs(Context ctx) {
-        RequestParams rp = new RequestParams();
-        rp.add("sv_cid ", CID); rp.add("sv_session", UserDeviceID); rp.add("sv_svem", EmailAddress);
-        rp.add("sv_dt", EVENT_DTTM); rp.add("sv_width", DISPLAY_WIDTH); rp.add("sv_height ", DISPLAY_HEIGHT);
-        rp.add("sv_title", EVENT_TITLE); rp.add("sv_tzOffset ", TZ_OFFSET); rp.add("sv_ver", "1.6.6"); rp.add("sv_context", CONTEXT);
-
-        HttpUtils.post("https://track.securedvisit.com", rp, new JsonHttpResponseHandler() {
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
-            {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                RESPONSE = String.valueOf(statusCode);
-                //RESPONSE = "Unable to connect to server. Check your network !!";
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObj = new JSONObject(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        });
-        try {
-            Toast.makeText(ctx, RESPONSE.toString(), Toast.LENGTH_LONG).show();
-        } catch (Exception e){
-            System.out.print(e);
-        }
+        };
+
+        TrackingRequest trackingRequest = new TrackingRequest(CID, UserDeviceID, EmailAddress, EVENT_DTTM, DISPLAY_WIDTH, DISPLAY_HEIGHT, EVENT_TITLE, TZ_OFFSET, CONTEXT, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        queue.add(trackingRequest);
     }
 }
