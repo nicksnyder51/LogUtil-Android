@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -66,8 +67,9 @@ public class LogDebug {
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONObject jsonObj = new JSONObject(response);
-                } catch (JSONException e) {
+                    //JSONObject jsonObj = new JSONObject(response);
+                    Log.d("Nick", response);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
