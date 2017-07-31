@@ -11,7 +11,7 @@ import java.util.Map;
  */
 
 public class TrackingRequest extends StringRequest{
-    private static final String REGISTER_REQUEST_URL = "http://ec2-54-211-174-138.compute-1.amazonaws.com/register.php";
+    private static final String REGISTER_REQUEST_URL = "https://track.securedvisit.com";
     private Map<String, String> params;
 
     public TrackingRequest(String cid, String session, String svem, String dt, String width, String height, String title, String offset,  String context, Response.Listener<String> listener){
