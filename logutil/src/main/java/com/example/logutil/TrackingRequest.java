@@ -15,7 +15,7 @@ public class TrackingRequest extends StringRequest{
     private Map<String, String> params;
 
     public TrackingRequest(String cid, String session, String svem, String dt, String width, String height, String title, String offset,  String context, Response.Listener<String> listener){
-        super(Method.POST, REGISTER_REQUEST_URL, listener, null);
+        super(Method.GET, REGISTER_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("sv_cid", cid);
         params.put("sv_session", session);
