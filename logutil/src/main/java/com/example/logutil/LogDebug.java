@@ -75,6 +75,6 @@ public class LogDebug {
 
         TrackingRequest trackingRequest = new TrackingRequest(CID, UserDeviceID, EmailAddress, EVENT_DTTM, DISPLAY_WIDTH, DISPLAY_HEIGHT, EVENT_TITLE, TZ_OFFSET, CONTEXT, responseListener);
         RequestQueue queue = Volley.newRequestQueue(ctx);
-        queue.add(trackingRequest);837335837335
+        queue.add(trackingRequest);
     }
 }
