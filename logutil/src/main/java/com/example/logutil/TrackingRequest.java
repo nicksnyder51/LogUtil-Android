@@ -1,5 +1,7 @@
 package com.example.logutil;
 
+import android.util.Log;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
@@ -33,6 +35,7 @@ public class TrackingRequest extends StringRequest{
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         int mStatusCode = response.statusCode;
+        Log.d("Nick", String.valueOf(mStatusCode));
         return super.parseNetworkResponse(response);
     }
 
