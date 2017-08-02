@@ -62,7 +62,7 @@ public class LogDebug {
     public static void setTZOffset(int tzOffset) {
         TZ_OFFSET = String.valueOf(tzOffset);
     }
-    public static void displaySharedPrefs(Context ctx) {
+    public static void sendTrackingCall(Context ctx) {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
